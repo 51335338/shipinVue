@@ -3,7 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+//全局变量
+import global from '../public/global';
+
 Vue.config.productionTip = false
+
+Vue.prototype._global = global
 
 new Vue({
   router,

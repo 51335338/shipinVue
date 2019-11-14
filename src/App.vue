@@ -1,32 +1,41 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div id="leftNav">
+      <left-nav></left-nav>
     </div>
-    <router-view/>
+    <div id="topNav">
+      <top-nav></top-nav>
+      <router-view />
+    </div>
   </div>
 </template>
 
+<script>
+import topNav from "./components/TopNav";
+import leftNav from "./components/LeftNav";
+
+export default {
+  components: {
+    topNav,
+    leftNav
+  }
+};
+</script>
+
 <style lang="less">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+// @import url("./index.less");
+body {
+  height: 100%;
+  background: #f0f0f0;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+#app {
+  display: flex;
+  height: 100%;
+  #leftNav {
+    flex: none;
+  }
+  #topNav {
+    width: 100%;
   }
 }
 </style>
