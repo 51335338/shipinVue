@@ -1,10 +1,10 @@
-/** 
- * 右侧导航栏， 非递归，只支持三级导航栏
+/**
+ * 右侧导航，支持递归，有bug，无法收起
  */
 <template>
-    <div class="nav-only" :class="isShow ? 'w240' : 'w64'">
+    <div class="nav-only">
         <h1 class="logo">
-            <img :src="isShow ? logoImgLg : logoImgSm" alt="logo"/>
+            <img :src="logoImg" alt="logo" @click="aaa"/>
         </h1>
         <el-menu
             unique-opened
@@ -13,44 +13,28 @@
             text-color="#8c8f9a"
             active-text-color="#fff"
             default-active="/"
-            :collapse="!isShow"
+            :collapse="collapse"
         >
-            <el-menu-item index="/">
-                <i class="iconfont iconshouye-"></i>
-                <span slot="title">首页</span>
-            </el-menu-item>
-            <el-submenu :index="firstItem.id" v-for="firstItem in menuList" :key="firstItem.id">
-                <template slot="title">
-                    <i class="iconfont" :class="firstItem.icon"></i>
-                    <span slot="title">{{firstItem.name}}</span>
-                </template>
-                <div v-for="secondItem in firstItem.chindern" :key="secondItem.id">
-                    <el-menu-item
-                        v-if="secondItem.chindern instanceof Array && secondItem.chindern.length == 0"
-                        :index="secondItem.path"
-                    >{{secondItem.name}}</el-menu-item>
-                    <el-submenu v-else :index="secondItem.id">
-                        <span slot="title">{{secondItem.name}}</span>
-                        <el-menu-item :index="thirdItem.path" v-for="thirdItem in secondItem.chindern" :key="thirdItem.id">
-                            {{thirdItem.name}}
-                        </el-menu-item>
-                    </el-submenu>
-                </div>
-            </el-submenu>
+            <list-menu :list="this.menuList"></list-menu>
         </el-menu>
     </div>
 </template>
 
 <script>
+import listMenu from "./ListMenu";
 export default {
     data() {
         return {
-            // 大logo
-            logoImgLg: this._global.logoImgLg,
-            // 小logo
-            logoImgSm: this._global.logoImgSm,
-            // 导航栏
+            logoImg: this._global.logoImg,
             menuList: [
+                {
+                    id: "1",
+                    name: "主页",
+                    icon: "iconshouye-",
+                    path: "/",
+                    chindern: [],
+                    chindernShow: false
+                },
                 {
                     id: "2",
                     name: "内容发布",
@@ -135,7 +119,7 @@ export default {
                                     id: "3-1-1",
                                     name: "数据概况",
                                     icon: "",
-                                    path: "/overview",
+                                    path: "",
                                     chindernShow: false,
                                     chindern: []
                                 },
@@ -218,30 +202,34 @@ export default {
                     ]
                 }
             ],
-            // isShow: true
+            collapse: true
         };
     },
     props: {
         isCollapse: Boolean
     },
     methods: {
+        aaa() {
+            this.collapse = !this.collapse;
+            console.log(this.collapse)
+        }
     },
     components: {
-
+        listMenu
     },
-    computed: {
-        isShow() {
-            return this.isCollapse
-        },
-    }
+    // computed: {
+    //     isShow() {
+    //         return this.isCollapse
+    //     }
+    // }
 };
 </script>
 
 <style lang="less">
 .nav-only {
+    width: 240px;
     height: 100%;
     background: #1a1d27;
-    transition: all .5s;
     .logo {
         display: flex;
         width: 100%;
@@ -250,10 +238,8 @@ export default {
         align-items: center;
         cursor: pointer;
         img {
-            // width: 160px;
-            // height: 35px;
-            max-width: 100%;
-            max-height: 100%;
+            width: 160px;
+            height: 35px;
         }
     }
     & > .list-container > .list .list-name:hover {
@@ -262,14 +248,5 @@ export default {
     .el-menu {
         border: none;
     }
-    .iconfont {
-        margin-right: 10px;
-    }
-}
-.w240 {
-    width: 240px;
-}
-.w64 {
-    width: 64px;
 }
 </style>

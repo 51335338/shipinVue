@@ -1,6 +1,6 @@
 <template>
     <div class="nav">
-        <i class="nav-left iconfont iconcaidan"></i>
+        <i class="nav-left iconfont iconcaidan" @click="leftNavShow"></i>
         <div class="nav-right">
             <div class="user-info">
                 <div class="user" @click=" ()=>{this.userInfoBoxShow = !this.userInfoBoxShow} ">
@@ -30,11 +30,25 @@ export default {
                 userName: '51335338',
                 vipLevel: '高级会员',
             },
-            userInfoBoxShow: false
+            userInfoBoxShow: false,
+            isLeftNavShow: true
+        }
+    },
+    methods: {
+        leftNavShow() {
+            this.isLeftNavShow = !this.isLeftNavShow
+            this.$emit('navShow', this.isLeftNavShow)
         }
     },
     components: {
         userInfo
+    },
+    created() {
+        // 屏幕尺寸超过1100时，左侧导航栏边窄
+        if(document.body.clientWidth < 1100) {
+            this.isLeftNavShow = false;
+            this.$emit('navShow', false)
+        }
     }
 }
 </script>
